@@ -26,6 +26,7 @@ export const PopUp = () => {
           buttons={<Button icon={<FontAwesomeIcon icon={faXmark} />} onClick={closePopUp} />}
           icon={popUp.icon}
         />
+        {popUp.content}
       </div>
     </Pill>
   </div>

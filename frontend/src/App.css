@@ -65,6 +65,21 @@
   flex-direction: column;
 }
 
+.title {
+  gap: 0.5em;
+  font-weight: bold;
+
+  &.level-1 {
+    font-size: 1.5em;
+  }
+  &.level-2 {
+    font-size: 1.25em;
+  }
+  &.level-3 {
+    font-size: 1.15em;
+  }
+}
+
 @media screen and (max-width: 700px) {
   .main-wrapper {
     display: flex;

@@ -8,6 +8,7 @@ import { Button } from './components/Button';
 import { PopUpProps, PopUpSwitchProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faNewspaper, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { UserPanel } from './components/UserPanel';
 
 export const PopUpContext = createContext({} as PopUpProps)
 export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpVisible: (x: boolean) => {}} as PopUpSwitchProps)
@@ -37,7 +38,7 @@ function App() {
   const openUserPopUp = () => {
     setPopUpContent({
       title: "User preferences",
-      content: "aaa",
+      content: <UserPanel />,
       icon: <FontAwesomeIcon icon={faUser} />,
     })
     setPopUpVisible(true)

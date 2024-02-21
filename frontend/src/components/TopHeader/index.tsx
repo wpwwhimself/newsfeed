@@ -10,12 +10,9 @@ interface Props {
 }
 
 export const TopHeader = ({level, label, buttons, icon}: Props) => {
-  const max_font_size = 28
-  const font_scale_factor = 6
-
   return <Pill>
     <div className="top-header flex-right">
-      <span className="title flex-right" style={{ fontSize: max_font_size - font_scale_factor * (level - 1) }}>
+      <span className={`title level-${level} flex-right`}>
         {icon}
         <span>{label}</span>
       </span>
