@@ -19,7 +19,7 @@ export const PopUp = () => {
 
   return <div className="pop-up-rear">
     <Pill>
-      <div className="pop-up-inner flex-down">
+      <div className="pop-up-inner flex-down center">
         <TopHeader
           level={2}
           label={popUp.title}

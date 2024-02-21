@@ -1,0 +1,14 @@
+.input-container {
+  gap: 0.25em;
+}
+
+input {
+  background: none;
+  color: inherit;
+  font-family: inherit;
+
+  border: 2px solid hsl(var(--bg3));
+  padding: 0.25em;
+  border-radius: 1em;
+  text-align: center;
+}

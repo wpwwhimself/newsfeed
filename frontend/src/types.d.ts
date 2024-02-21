@@ -10,3 +10,5 @@ interface PopUpSwitchProps {
   popUpVisible: boolean,
   setPopUpVisible: Dispatch<SetStateAction<boolean>>,
 }
+
+type LoginMode = "login" | "register" | "authed" | "guest"
