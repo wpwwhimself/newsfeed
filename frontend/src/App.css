@@ -1,0 +1,47 @@
+:root {
+  --accent-color: 39, 100%, 50%;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --fg: 0, 0%, 100%;
+    --bg1: 0, 0%, 7%;
+    --bg2: 0, 0%, 13%;
+    --bg3: 0, 0%, 20%;
+  }
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --fg: 0, 0%, 0%;
+    --bg1: 0, 0%, 100%;
+    --bg2: 0, 0%, 93%;
+    --bg3: 0, 0%, 87%;
+  }
+}
+
+.App {
+  background-color: hsl(var(--bg1));
+  color: hsl(var(--fg));
+  min-height: calc(100vh - 2em);
+  font-family: "Ubuntu";
+  padding: 1em;
+}
+
+.flex-right, .flex-down {
+  display: flex;
+  gap: 1em;
+  
+  &.center {
+    justify-content: center;
+    align-items: center;
+  }
+  &.stretch {
+    justify-content: space-between;
+  }
+}
+.flex-right {
+  flex-direction: row;
+}
+.flex-down {
+  flex-direction: column;
+}
