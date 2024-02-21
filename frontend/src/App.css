@@ -1,5 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
-  --accent-color: 39, 100%, 50%;
+  --acc: 39, 100%, 50%;
+}
+* {
+  transition-duration: 0.2s;
+}
+
+@media (prefers-reduced-motion) {
+  * {
+    transition: none;
+  }
 }
 
 @media (prefers-color-scheme: dark){
@@ -23,7 +34,7 @@
   background-color: hsl(var(--bg1));
   color: hsl(var(--fg));
   min-height: calc(100vh - 2em);
-  font-family: "Ubuntu";
+  font-family: "Raleway", sans-serif;
   padding: 1em;
 }
 
