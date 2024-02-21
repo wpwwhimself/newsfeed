@@ -9,6 +9,8 @@ import { PopUpProps, PopUpSwitchProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faNewspaper, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { UserPanel } from './components/UserPanel';
+import { SearchPanel } from './components/SearchPanel';
+import { FilterPanel } from './components/FilterPanel';
 
 export const PopUpContext = createContext({} as PopUpProps)
 export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpVisible: (x: boolean) => {}} as PopUpSwitchProps)
@@ -20,7 +22,7 @@ function App() {
   const openSearchPopUp = () => {
     setPopUpContent({
       title: "Search by keyword",
-      content: "aaa",
+      content: <SearchPanel />,
       icon: <FontAwesomeIcon icon={faSearch} />,
     })
     setPopUpVisible(true)
@@ -29,7 +31,7 @@ function App() {
   const openFilterPopUp = () => {
     setPopUpContent({
       title: "Filter articles",
-      content: "aaa",
+      content: <FilterPanel />,
       icon: <FontAwesomeIcon icon={faFilter} />,
     })
     setPopUpVisible(true)
