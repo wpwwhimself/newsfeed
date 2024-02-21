@@ -27,9 +27,17 @@
   padding: 1em;
 }
 
+.main-wrapper, .flex-right, .flex-down {
+  gap: 1em;
+}
+
+.main-wrapper {
+  display: grid;
+  grid-template-columns: 300px 3fr;
+}
+
 .flex-right, .flex-down {
   display: flex;
-  gap: 1em;
   
   &.center {
     justify-content: center;
@@ -44,4 +52,11 @@
 }
 .flex-down {
   flex-direction: column;
+}
+
+@media screen and (max-width: 700px) {
+  .main-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
 }
