@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
 import { TopHeader } from './components/TopHeader';
 import { ArticleList } from './components/ArticleList';
@@ -11,6 +11,7 @@ import { faFilter, faNewspaper, faSearch, faUser } from '@fortawesome/free-solid
 import { UserPanel } from './components/UserPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { FilterPanel } from './components/FilterPanel';
+import { rqGet } from './helpers/fetch';
 
 export const PopUpContext = createContext({} as PopUpProps)
 export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpVisible: (x: boolean) => {}} as PopUpSwitchProps)
@@ -18,6 +19,11 @@ export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpV
 function App() {
   const [popUpContent, setPopUpContent] = useState({} as PopUpProps)
   const [popUpVisible, setPopUpVisible] = useState(false)
+
+  useEffect(() => {
+    rqGet("hellothere")
+      .then(res => console.log(res))
+  }, [])
 
   const openSearchPopUp = () => {
     setPopUpContent({
