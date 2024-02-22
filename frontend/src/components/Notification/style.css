@@ -1,0 +1,9 @@
+.error {
+  color: hsl(0, 70%, 50%);
+}
+.success {
+  color: hsl(90, 70%, 50%);
+}
+.info {
+  color: hsl(210, 70%, 50%);
+}

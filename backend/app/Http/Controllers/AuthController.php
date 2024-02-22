@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function me(Request $rq) {
-        return $rq->user();
+        return $rq->user("sanctum");
     }
 
     public function login(Request $rq) {
@@ -19,16 +19,16 @@ class AuthController extends Controller
             "password" => "required|min:8"
         ]);
 
-        $user = User::where("name", $userData["name"])->first();
-        if(!$user || !Hash::check($userData["password"], $user->password)){
-            return response()->json(["message" => 'Invalid credentials'], 401);
+        if (Auth::attempt($userData)) {
+            $rq->session()->regenerate();
+            return response()->json(["message" => "Logged in"]);
         }
 
-        return response()->json(["message" => "Logged in"]);
+        return response()->json(["message" => "Login failed"], 401);
     }
 
     public function logout(Request $rq) {
-        Auth::logout();
+        $rq->user()->tokens()->delete();
         $rq->session()->invalidate();
         $rq->session()->regenerateToken();
 
@@ -45,8 +45,11 @@ class AuthController extends Controller
         $user = User::create([
             "name" => $userData["name"],
             "email" => $userData["email"],
-            "password" => Hash::make($userData["name"]),
+            "password" => Hash::make($userData["password"]),
         ]);
+
+        Auth::login($user);
+        $rq->session()->regenerate();
 
         return response()->json(["message" => "User created"]);
     }

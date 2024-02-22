@@ -12,3 +12,8 @@ interface PopUpSwitchProps {
 }
 
 type LoginMode = "login" | "register" | "authed" | "guest"
+
+interface NotificationProps {
+  mode: "success" | "error" | "info",
+  content: any
+}

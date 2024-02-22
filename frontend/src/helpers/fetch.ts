@@ -8,6 +8,9 @@ const headers = {
   "Content-Type": "application/json",
 }
 
+axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
+
 /**
  * The wrapper for GET requests
  * @param URLTail The rest of URL

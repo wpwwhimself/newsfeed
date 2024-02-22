@@ -87,7 +87,7 @@
   color: hsl(var(--acc));
 }
 .accent-border {
-  border: 2px solid hsl(var(--acc));
+  border: 1px solid hsl(var(--acc));
 }
 
 @media screen and (max-width: 700px) {
