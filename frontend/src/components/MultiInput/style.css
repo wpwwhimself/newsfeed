@@ -1,0 +1,14 @@
+ul {
+  margin: 0;
+  padding-left: 1em;
+}
+
+li > .button {
+  display: none;
+  padding: 0em 1em;
+  margin-left: 0.25em;
+
+}
+li:hover > .button {
+  display: inline-block;
+}

@@ -3,10 +3,6 @@ import axios from "axios"
 const host = "http://localhost:8000/"
 const default_url = host + "api/"
 const sanctum_url = host + "sanctum/"
-const headers = {
-  "Accept": "application/json",
-  "Content-Type": "application/json",
-}
 
 axios.defaults.withCredentials = true
 axios.defaults.withXSRFToken = true

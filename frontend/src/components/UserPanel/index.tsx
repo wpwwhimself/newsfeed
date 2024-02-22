@@ -3,11 +3,12 @@ import "./style.css"
 import { LoginMode, NotificationProps } from "../../types"
 import { Input } from "../Input"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAnglesRight, faEnvelope, faIdCard, faKey, faPowerOff, faRightToBracket, faStar } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faBullhorn, faEnvelope, faFolderTree, faIdCard, faKey, faPowerOff, faRightToBracket, faStar, faUserPen } from "@fortawesome/free-solid-svg-icons"
 import { Button } from "../Button"
 import { Hourglass } from "../Hourglass"
 import { rqGet, rqPost } from "../../helpers/fetch"
 import { Notification } from "../Notification"
+import { MultiInput } from "../MultiInput"
 
 export const UserPanel = () => {
   const [mode, setMode] = useState<LoginMode>("guest")
@@ -126,6 +127,22 @@ export const UserPanel = () => {
           <span className="title level-2">Browsing as: {login}</span>
 
           <div className="inputs flex-down">
+            <MultiInput
+              icon={<FontAwesomeIcon icon={faBullhorn} />}
+              label="Preferred sources"
+              onChange={() => {}}
+            />
+            <MultiInput
+              icon={<FontAwesomeIcon icon={faFolderTree} />}
+              label="Preferred categories"
+              onChange={() => {}}
+            />
+            <MultiInput
+              icon={<FontAwesomeIcon icon={faUserPen} />}
+              label="Preferred authors"
+              onChange={() => {}}
+            />
+
             <Button
               icon={<FontAwesomeIcon icon={faPowerOff} />}
               label="Logout"

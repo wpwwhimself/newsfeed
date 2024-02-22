@@ -89,6 +89,9 @@
 .accent-border {
   border: 1px solid hsl(var(--acc));
 }
+.ghost {
+  opacity: 0.5;
+}
 
 @media screen and (max-width: 700px) {
   .main-wrapper {

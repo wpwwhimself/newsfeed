@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react"
 import "./style.css"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 export const Input = ({type = "text", name, label, icon, value, onChange}: Props) => {
   return <div className="input-container flex-down tight">
-    <label htmlFor="">{icon} {label}</label>
+    <label htmlFor={name} className="ghost">{icon} {label}</label>
     <input
       type={type}
       id={name}
