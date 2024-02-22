@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,14 @@ Route::get("/hellothere", function () {
     return response()->json("general kenobi");
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(AuthController::class)->group(function () {
+    Route::get("me", "me");
+
+    foreach(["register", "login"] as $route) {
+        Route::post($route, $route);
+    }
+
+    Route::middleware("auth:sanctum")->group(function () {
+        Route::post("logout", "logout");
+    });
 });

@@ -1,6 +1,12 @@
-// import { getKey } from "./Storage"
+import axios from "axios"
 
-const URLHead = "http://localhost:8000/api/"
+const host = "http://localhost:8000/"
+const default_url = host + "api/"
+const sanctum_url = host + "sanctum/"
+const headers = {
+  "Accept": "application/json",
+  "Content-Type": "application/json",
+}
 
 /**
  * The wrapper for GET requests
@@ -8,9 +14,8 @@ const URLHead = "http://localhost:8000/api/"
  * @param params Request parameters
  * @returns
  */
-export const rqGet = (URLTail: string, params = {}) =>
-  fetch(URLHead + URLTail + "?" + new URLSearchParams(params))
-    .then(res => res.json())
+export const rqGet = (URLTail: string, params = {}, URLHead = default_url) =>
+  axios.get(URLHead + URLTail + "?" + new URLSearchParams(params))
 
 /**
  * The wrapper for POST requests
@@ -18,32 +23,17 @@ export const rqGet = (URLTail: string, params = {}) =>
  * @param params Request parameters
  * @returns
  */
-export const rqPost = (URLTail: string, params = {}) =>
-  fetch(URLHead + URLTail, {
-    method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params)
-  }).then(res => res.json())
+export const rqPost = (URLTail: string, params = {}, URLHead = default_url) =>
+  axios.get(sanctum_url + "csrf-cookie").then(res => 
+    axios.post(URLHead + URLTail, params)
+  )
 
-export const rqPatch = (URLTail: string, params = {}) =>
-  fetch(URLHead + URLTail, {
-    method: "PATCH",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params)
-  }).then(res => res.json())
+export const rqPatch = (URLTail: string, params = {}, URLHead = default_url) =>
+  axios.get(sanctum_url + "csrf-cookie").then(res => 
+    axios.patch(URLHead + URLTail, params)
+  )
 
-export const rqDelete = (URLTail: string, params = {}) =>
-  fetch(URLHead + URLTail, {
-    method: "DELETE",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params)
-  }).then(res => res.json())
+export const rqDelete = (URLTail: string, params = {}, URLHead = default_url) =>
+  axios.get(sanctum_url + "csrf-cookie").then(res => 
+    axios.delete(URLHead + URLTail, params)
+  )

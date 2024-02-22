@@ -2,7 +2,6 @@
   background-color: hsl(var(--bg3));
   padding: 0.5em 1em;
   border-radius: 1em;
-  gap: 0.5em;
   user-select: none;
   cursor: pointer;
 }

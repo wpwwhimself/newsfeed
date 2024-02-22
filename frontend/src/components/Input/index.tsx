@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const Input = ({type = "text", label, icon, value, onChange}: Props) => {
-  return <div className="input-container flex-down">
+  return <div className="input-container flex-down tight">
     <label htmlFor="">{icon} {label}</label>
     <input type={type} value={value} onChange={(ev) => onChange(ev.currentTarget.value)} />
   </div>

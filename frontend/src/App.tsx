@@ -21,8 +21,7 @@ function App() {
   const [popUpVisible, setPopUpVisible] = useState(false)
 
   useEffect(() => {
-    rqGet("hellothere")
-      .then(res => console.log(res))
+    rqGet("hellothere").then(res => console.debug(res))
   }, [])
 
   const openSearchPopUp = () => {

@@ -12,6 +12,7 @@ export const Button = ({icon, label, onClick, highlighted = false}: Props) => {
     "button",
     "flex-right",
     "center",
+    "tight",
     highlighted && "accent-border",
   ].filter(Boolean).join(" ")} onClick={onClick}>
     {icon}

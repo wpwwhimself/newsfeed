@@ -57,6 +57,9 @@
   &.stretch {
     justify-content: space-between;
   }
+  &.tight {
+    gap: 0.25em;
+  }
 }
 .flex-right {
   flex-direction: row;
