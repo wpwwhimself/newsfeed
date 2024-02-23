@@ -48,9 +48,6 @@ class AuthController extends Controller
             "password" => Hash::make($userData["password"]),
         ]);
 
-        Auth::login($user);
-        $rq->session()->regenerate();
-
         return response()->json(["message" => "User created"]);
     }
 }

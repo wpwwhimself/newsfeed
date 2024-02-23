@@ -43,7 +43,7 @@ export const UserPanel = () => {
       password: password,
     }).then(res => {
       setNotifications({ mode: "success", content: res.data.message })
-      prepareForAuth()
+      if (mode === "login") prepareForAuth()
     }).catch(err => {
       setNotifications({ mode: "error", content: err.response.data.message })
     }).finally(() => {
@@ -111,88 +111,85 @@ export const UserPanel = () => {
     prepareForAuth()
   }, [])
 
-  return <div className="user-panel">
-    <div>
-      <div className="flex-down">
-        {mode && mode !== "authed"
-        ? <>
-          <span className="title level-2">You are currently not logged in</span>
+  return <div className="user-panel flex-down">
+    {["guest", "login", "register"].includes(mode!) && <>
+      <span className="title level-2">You are currently not logged in</span>
 
-          <div className="flex-right center">
-            <Button
-              icon={<FontAwesomeIcon icon={faRightToBracket} />}
-              label="Login"
-              onClick={() => changeLoginMode("login")}
-              highlighted={mode === "login"}
-            />
-            <Button
-              icon={<FontAwesomeIcon icon={faStar} />}
-              label="Register"
-              onClick={() => changeLoginMode("register")}
-              highlighted={mode === "register"}
-            />
-          </div>
-
-          {["login", "register"].includes(mode!) && <div className="inputs flex-down">
-            <Input name="username"
-              icon={<FontAwesomeIcon icon={faIdCard} />}
-              label="Username"
-              onChange={setLogin}
-            />
-            {mode === "register" &&
-              <Input
-                type="email"
-                icon={<FontAwesomeIcon icon={faEnvelope} />}
-                label="Email"
-                onChange={setEmail}
-              />}
-            <Input
-              type="password"
-              icon={<FontAwesomeIcon icon={faKey} />}
-              label="Password"
-              onChange={setPassword}
-            />
-            <Button
-              icon={<FontAwesomeIcon icon={faAnglesRight} />}
-              label="Proceed"
-              onClick={submitForm}
-            />
-          </div>}
-        </>
-        : <>
-          <span className="title level-2">Browsing as: {login}</span>
-
-          <div className="inputs flex-down">
-            <MultiInput
-              icon={<FontAwesomeIcon icon={faBullhorn} />}
-              label="Preferred sources"
-              value={sources}
-              onChange={(val) => updatePreferences(val, 1)}
-            />
-            <MultiInput
-              icon={<FontAwesomeIcon icon={faFolderTree} />}
-              label="Preferred categories"
-              value={categories}
-              onChange={(val) => updatePreferences(val, 2)}
-            />
-            <MultiInput
-              icon={<FontAwesomeIcon icon={faUserPen} />}
-              label="Preferred authors"
-              value={authors}
-              onChange={(val) => updatePreferences(val, 3)}
-            />
-
-            <Button
-              icon={<FontAwesomeIcon icon={faPowerOff} />}
-              label="Logout"
-              onClick={logoutUser}
-            />
-          </div>
-        </>}
-
-        {loaderVisible && <Hourglass />}
-        {notifications && <Notification notification={notifications} />}
+      <div className="flex-right center">
+        <Button
+          icon={<FontAwesomeIcon icon={faRightToBracket} />}
+          label="Login"
+          onClick={() => changeLoginMode("login")}
+          highlighted={mode === "login"}
+        />
+        <Button
+          icon={<FontAwesomeIcon icon={faStar} />}
+          label="Register"
+          onClick={() => changeLoginMode("register")}
+          highlighted={mode === "register"}
+        />
       </div>
-    </div>
+
+      {mode !== "guest" && <div className="inputs flex-down">
+        <Input name="username"
+          icon={<FontAwesomeIcon icon={faIdCard} />}
+          label="Username"
+          onChange={setLogin}
+        />
+        {mode === "register" &&
+          <Input
+            type="email"
+            icon={<FontAwesomeIcon icon={faEnvelope} />}
+            label="Email"
+            onChange={setEmail}
+          />}
+        <Input
+          type="password"
+          icon={<FontAwesomeIcon icon={faKey} />}
+          label="Password"
+          onChange={setPassword}
+        />
+        <Button
+          icon={<FontAwesomeIcon icon={faAnglesRight} />}
+          label="Proceed"
+          onClick={submitForm}
+        />
+      </div>}
+    </>
+    }
+
+    {mode === "authed" && <>
+      <span className="title level-2">Browsing as: {login}</span>
+
+      <div className="inputs flex-down">
+        <MultiInput
+          icon={<FontAwesomeIcon icon={faBullhorn} />}
+          label="Preferred sources"
+          value={sources}
+          onChange={(val) => updatePreferences(val, 1)}
+        />
+        <MultiInput
+          icon={<FontAwesomeIcon icon={faFolderTree} />}
+          label="Preferred categories"
+          value={categories}
+          onChange={(val) => updatePreferences(val, 2)}
+        />
+        <MultiInput
+          icon={<FontAwesomeIcon icon={faUserPen} />}
+          label="Preferred authors"
+          value={authors}
+          onChange={(val) => updatePreferences(val, 3)}
+        />
+
+        <Button
+          icon={<FontAwesomeIcon icon={faPowerOff} />}
+          label="Logout"
+          onClick={logoutUser}
+        />
+      </div>
+    </>}
+
+    {loaderVisible && <Hourglass />}
+    {notifications && <Notification notification={notifications} />}
   </div>
 }
