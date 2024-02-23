@@ -1,3 +1,4 @@
+import { date } from "../../helpers/dateFormat"
 import { ArticleProps } from "../../types"
 import { Notification } from "../Notification"
 import { Pill } from "../Pill"
@@ -19,11 +20,11 @@ export const Article = ({article}: Props) => {
       <img src={url_to_image} alt={title} />
       <span className="title level-2">{title}</span>
       <span className="title level-3">{description}</span>
-      <span className="ghost">{author}, {source}, {published_at?.toString()}</span>
+      <span className="ghost">by {author} • {date(published_at)}</span>
 
       <p>{content}</p>
 
-      <span className="ghost">Source: <a href={url}>{url}</a></span>
+      <span className="ghost">Source: <a href={url}>{source}</a></span>
     </div>
   </Pill>
 }

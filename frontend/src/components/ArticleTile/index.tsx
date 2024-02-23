@@ -1,3 +1,4 @@
+import { date } from "../../helpers/dateFormat"
 import { ArticleProps } from "../../types"
 import "./style.css"
 
@@ -13,6 +14,6 @@ export const ArticleTile = ({article, onClick}: Props) => {
     <img src={url_to_image} alt={title} />
     <span className="title level-3 accent">{title}</span>
     <span>{description}</span>
-    <span className="ghost">{published_at.toString()}</span>
+    <span className="ghost">{date(published_at)}</span>
   </div>
 }

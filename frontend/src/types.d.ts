@@ -39,5 +39,5 @@ interface ArticleProps {
   author: string,
   url: string,
   url_to_image: string,
-  published_at: Date,
+  published_at: string,
 }
