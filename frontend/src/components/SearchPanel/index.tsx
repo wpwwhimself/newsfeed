@@ -31,7 +31,7 @@ export const SearchPanel = () => {
     />
     <Button
       icon={<FontAwesomeIcon icon={faAnglesRight} />}
-      label="Proceed"
+      label="Apply"
       onClick={submitForm}
     />
   </div>

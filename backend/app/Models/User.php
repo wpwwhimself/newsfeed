@@ -43,6 +43,19 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $appends = [
+        "preferences_grouped",
+    ];
+
+    public function getPreferencesGroupedAttribute() {
+        return $this->preferences
+            ->groupBy("user_preference_type_id")
+            ->map(fn($prefs) =>
+                $prefs->map(fn($pref) => $pref->value)
+            )
+        ;
+    }
+
     public function preferences() {
         return $this->hasMany(UserPreference::class);
     }

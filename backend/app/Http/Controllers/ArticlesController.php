@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserPreference;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
@@ -27,6 +29,20 @@ class ArticlesController extends Controller
         }
         if ($rq->sources) {
             $test .= " • from sources " . $rq->sources;
+        }
+
+        if (Auth::check() && UserPreference::where("user_id", Auth::id())->count()) {
+            foreach (["sources", "categories", "authors"] as $type) {
+                $prefs = UserPreference::where("user_id", Auth::id())
+                    ->whereHas("type", function ($q) use ($type) {
+                        $q->where("name", $type);
+                    })
+                    ->get()
+                ;
+                if ($prefs->count()) {
+                    $test .= " • from user's $type " . $prefs->implode("value", ",");
+                }
+            }
         }
 
         $articles = [

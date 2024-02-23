@@ -24,6 +24,12 @@ export const UserPanel = () => {
   const [loaderVisible, setLoaderVisible] = useState(true)
   const [notifications, setNotifications] = useState<NotificationProps>()
 
+  const setPreference: PreferencesSettersDict = {
+    1: setSources,
+    2: setCategories,
+    3: setAuthors,
+  }
+
   const changeLoginMode = (new_mode: LoginMode) => {
     setNotifications(undefined)
     setMode(new_mode)
@@ -74,7 +80,11 @@ export const UserPanel = () => {
       } else {
         setMode("authed")
         setLogin(res.data.name)
-        setEmail(res.data.email)
+
+        // set preferences
+        Object.keys(res.data.preferences_grouped).forEach((type) => {
+          setPreference[+type](res.data.preferences_grouped[type])
+        })
       }
     }).finally(() => {
       setLoaderVisible(false)
@@ -84,12 +94,6 @@ export const UserPanel = () => {
   const updatePreferences = (value: string[], type: number) => {
     prepareForRequest()
     let success = false;
-
-    const setPreference: PreferencesSettersDict = {
-      1: setSources,
-      2: setCategories,
-      3: setAuthors,
-    }
 
     rqPost("preference/update", {
       type: type,

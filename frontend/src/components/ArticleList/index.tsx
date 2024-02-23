@@ -6,6 +6,9 @@ import { Hourglass } from "../Hourglass"
 import { ArticleContext, FilterContext } from "../../App"
 import { ArticleTile } from "../ArticleTile"
 import { Notification } from "../Notification"
+import { Button } from "../Button"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
 export const ArticleList = () => {
   const [articles, setArticles] = useState<ArticleProps[]>([])
@@ -46,14 +49,20 @@ export const ArticleList = () => {
   }, [filters])
 
   return <Pill>
-    {loaderVisible ? <Hourglass /> : <>
+    {loaderVisible ? <Hourglass /> : <div className="flex-down">
       {notifications && <Notification notification={notifications} />}
+
+      <Button
+        icon={<FontAwesomeIcon icon={faRotateRight} />}
+        onClick={loadArticles}
+      />
+
       {articles.map((article, i) =>
         <ArticleTile key={i}
           article={article}
           onClick={() => openArticle(article)}
         />
       )}
-    </>}
+    </div>}
   </Pill>
 }

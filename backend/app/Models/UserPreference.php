@@ -14,4 +14,10 @@ class UserPreference extends Model
         "user_preference_type_id",
         "value",
     ];
+
+    protected $with = ["type"];
+
+    public function type() {
+        return $this->belongsTo(UserPreferenceType::class, "user_preference_type_id");
+    }
 }
