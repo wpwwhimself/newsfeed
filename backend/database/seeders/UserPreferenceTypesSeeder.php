@@ -13,9 +13,9 @@ class UserPreferenceTypesSeeder extends Seeder
     public function run(): void
     {
         DB::table("user_preference_types")->insert([
-            ["name" => "source"],
-            ["name" => "category"],
-            ["name" => "author"],
+            ["name" => "sources"],
+            ["name" => "categories"],
+            ["name" => "authors"],
         ]);
     }
 }

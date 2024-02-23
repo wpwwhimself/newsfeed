@@ -87,7 +87,7 @@
   color: hsl(var(--acc));
 }
 .accent-border {
-  border: 1px solid hsl(var(--acc));
+  border: 2px solid hsl(var(--acc));
 }
 .ghost {
   opacity: 0.5;

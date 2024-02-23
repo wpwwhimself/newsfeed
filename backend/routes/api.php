@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PreferencesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +30,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::middleware("auth:sanctum")->group(function () {
         Route::post("logout", "logout");
     });
+});
+
+Route::middleware("auth:sanctum")->controller(PreferencesController::class)->prefix("preference")->group(function () {
+    Route::get("/", "list");
+    Route::post("/update", "update");
 });

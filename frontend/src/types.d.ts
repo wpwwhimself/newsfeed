@@ -17,3 +17,7 @@ interface NotificationProps {
   mode: "success" | "error" | "info",
   content: any
 }
+
+interface PreferencesSettersDict {
+  [type: number]: Dispatch<SetStateAction<string[] | undefined>>,
+}

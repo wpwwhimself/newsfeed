@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./style.css"
-import { LoginMode, NotificationProps } from "../../types"
+import { LoginMode, NotificationProps, PreferencesSettersDict } from "../../types"
 import { Input } from "../Input"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAnglesRight, faBullhorn, faEnvelope, faFolderTree, faIdCard, faKey, faPowerOff, faRightToBracket, faStar, faUserPen } from "@fortawesome/free-solid-svg-icons"
@@ -11,10 +11,16 @@ import { Notification } from "../Notification"
 import { MultiInput } from "../MultiInput"
 
 export const UserPanel = () => {
-  const [mode, setMode] = useState<LoginMode>("guest")
+  const [mode, setMode] = useState<LoginMode>()
+
   const [login, setLogin] = useState<string>()
   const [email, setEmail] = useState<string>()
   const [password, setPassword] = useState<string>()
+
+  const [sources, setSources] = useState<string[]>()
+  const [categories, setCategories] = useState<string[]>()
+  const [authors, setAuthors] = useState<string[]>()
+
   const [loaderVisible, setLoaderVisible] = useState(true)
   const [notifications, setNotifications] = useState<NotificationProps>()
 
@@ -23,11 +29,15 @@ export const UserPanel = () => {
     setMode(new_mode)
   }
 
-  const submitForm = () => {
+  const prepareForRequest = () => {
     setLoaderVisible(true)
     setNotifications(undefined)
+  }
 
-    rqPost(mode, {
+  const submitForm = () => {
+    prepareForRequest()
+
+    rqPost(mode!, {
       name: login,
       email: email,
       password: password,
@@ -42,8 +52,7 @@ export const UserPanel = () => {
   }
 
   const logoutUser = () => {
-    setLoaderVisible(true)
-    setNotifications(undefined)
+    prepareForRequest()
 
     rqPost("logout")
       .then(res => {
@@ -57,7 +66,8 @@ export const UserPanel = () => {
   }
 
   const prepareForAuth = () => {
-    setLoaderVisible(true)
+    prepareForRequest()
+
     rqGet("me").then(res => {
       if (res.data === "") {
         setMode("guest")
@@ -71,14 +81,40 @@ export const UserPanel = () => {
     })
   }
 
+  const updatePreferences = (value: string[], type: number) => {
+    prepareForRequest()
+    let success = false;
+
+    const setPreference: PreferencesSettersDict = {
+      1: setSources,
+      2: setCategories,
+      3: setAuthors,
+    }
+
+    rqPost("preference/update", {
+      type: type,
+      preferences: value,
+    }).then(res => {
+      setNotifications({ mode: "success", content: res.data.message })
+      setPreference[type](value)
+      success = true
+    }).catch(err => {
+      setNotifications({ mode: "error", content: err.response.data.message })
+    }).finally(() => {
+      setLoaderVisible(false)
+    })
+
+    return success;
+  }
+
   useEffect(() => {
     prepareForAuth()
   }, [])
 
   return <div className="user-panel">
-    {loaderVisible ? <Hourglass /> : <div>
+    <div>
       <div className="flex-down">
-        {mode !== "authed"
+        {mode && mode !== "authed"
         ? <>
           <span className="title level-2">You are currently not logged in</span>
 
@@ -97,7 +133,7 @@ export const UserPanel = () => {
             />
           </div>
 
-          {["login", "register"].includes(mode) && <div className="inputs flex-down">
+          {["login", "register"].includes(mode!) && <div className="inputs flex-down">
             <Input name="username"
               icon={<FontAwesomeIcon icon={faIdCard} />}
               label="Username"
@@ -130,17 +166,20 @@ export const UserPanel = () => {
             <MultiInput
               icon={<FontAwesomeIcon icon={faBullhorn} />}
               label="Preferred sources"
-              onChange={() => {}}
+              value={sources}
+              onChange={(val) => updatePreferences(val, 1)}
             />
             <MultiInput
               icon={<FontAwesomeIcon icon={faFolderTree} />}
               label="Preferred categories"
-              onChange={() => {}}
+              value={categories}
+              onChange={(val) => updatePreferences(val, 2)}
             />
             <MultiInput
               icon={<FontAwesomeIcon icon={faUserPen} />}
               label="Preferred authors"
-              onChange={() => {}}
+              value={authors}
+              onChange={(val) => updatePreferences(val, 3)}
             />
 
             <Button
@@ -151,8 +190,9 @@ export const UserPanel = () => {
           </div>
         </>}
 
+        {loaderVisible && <Hourglass />}
         {notifications && <Notification notification={notifications} />}
       </div>
-    </div>}
+    </div>
   </div>
 }

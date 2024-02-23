@@ -9,7 +9,7 @@ interface Props {
   label: string,
   icon?: JSX.Element,
   value?: string[],
-  onChange: Dispatch<SetStateAction<string[]>>,
+  onChange: (val: string[]) => boolean,
 }
 
 export const MultiInput = ({name, label, icon, value, onChange}: Props) => {
@@ -22,15 +22,13 @@ export const MultiInput = ({name, label, icon, value, onChange}: Props) => {
 
   const addValue = () => {
     const newList = [...valueList, newValue]
-    if (newValue) setValueList(newList)
     setNewValue("")
-    onChange(newList)
+    if (newValue && onChange(newList) === true) setValueList(newList)
   }
 
   const removeValue = (index: number) => {
     const newList = valueList.filter(el => valueList.indexOf(el) !== index)
-    setValueList(newList)
-    onChange(newList)
+    if (onChange(newList) === true) setValueList(newList)
   }
 
   return <div className="input-container flex-down tight">
