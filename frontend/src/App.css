@@ -73,10 +73,10 @@
   font-weight: bold;
 
   &.level-1 {
-    font-size: 1.5em;
+    font-size: 1.65em;
   }
   &.level-2 {
-    font-size: 1.25em;
+    font-size: 1.35em;
   }
   &.level-3 {
     font-size: 1.15em;
