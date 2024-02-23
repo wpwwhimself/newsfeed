@@ -26,30 +26,8 @@ function App() {
     rqGet("hellothere").then(res => console.debug(res))
   }, [])
 
-  const openSearchPopUp = () => {
-    setPopUpContent({
-      title: "Search by keyword",
-      content: <SearchPanel />,
-      icon: <FontAwesomeIcon icon={faSearch} />,
-    })
-    setPopUpVisible(true)
-  }
-
-  const openFilterPopUp = () => {
-    setPopUpContent({
-      title: "Filter articles",
-      content: <FilterPanel />,
-      icon: <FontAwesomeIcon icon={faFilter} />,
-    })
-    setPopUpVisible(true)
-  }
-
-  const openUserPopUp = () => {
-    setPopUpContent({
-      title: "User preferences",
-      content: <UserPanel />,
-      icon: <FontAwesomeIcon icon={faUser} />,
-    })
+  const openPopUp = (popUpContent: PopUpProps) => {
+    setPopUpContent(popUpContent)
     setPopUpVisible(true)
   }
 
@@ -63,9 +41,21 @@ function App() {
         level={1}
         label="NewsFeed"
         buttons={<>
-          <Button icon={<FontAwesomeIcon icon={faSearch} />} onClick={openSearchPopUp}/>
-          <Button icon={<FontAwesomeIcon icon={faFilter} />} onClick={openFilterPopUp}/>
-          <Button icon={<FontAwesomeIcon icon={faUser} />} onClick={openUserPopUp}/>
+          <Button icon={<FontAwesomeIcon icon={faSearch} />} onClick={() => openPopUp({
+            title: "Search by keyword",
+            content: <SearchPanel />,
+            icon: <FontAwesomeIcon icon={faSearch} />,
+          })} />
+          <Button icon={<FontAwesomeIcon icon={faFilter} />} onClick={() => openPopUp({
+            title: "Filter articles",
+            content: <FilterPanel />,
+            icon: <FontAwesomeIcon icon={faFilter} />,
+          })} />
+          <Button icon={<FontAwesomeIcon icon={faUser} />} onClick={() => openPopUp({
+            title: "User preferences",
+            content: <UserPanel />,
+            icon: <FontAwesomeIcon icon={faUser} />,
+          })} />
         </>}
         icon={<FontAwesomeIcon icon={faNewspaper} />}
       />
