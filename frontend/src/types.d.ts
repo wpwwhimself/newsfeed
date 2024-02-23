@@ -21,3 +21,11 @@ interface NotificationProps {
 interface PreferencesSettersDict {
   [type: number]: Dispatch<SetStateAction<string[] | undefined>>,
 }
+
+interface FilterProps {
+  keyword?: string,
+  dateFrom?: Date,
+  dateTo?: Date,
+  categories?: string[],
+  sources?: string[],
+}

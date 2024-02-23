@@ -1,19 +1,32 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Input } from "../Input"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Button } from "../Button"
-import { faAnglesRight } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faKey } from "@fortawesome/free-solid-svg-icons"
+import { FilterContext, PopUpSwitchContext } from "../../App"
 
 export const SearchPanel = () => {
   const [keyword, setKeyword] = useState<string>()
 
+  const {filters, setFilters} = useContext(FilterContext)
+  const {setPopUpVisible} = useContext(PopUpSwitchContext)
+
+  useEffect(() => {
+    setKeyword(filters.keyword)
+  }, [filters])
+
   const submitForm = () => {
-    
+    setFilters({ ...filters, keyword: keyword })
+    setPopUpVisible(false)
   }
 
   return <div className="inputs flex-down">
+    
     <Input
+      icon={<FontAwesomeIcon icon={faKey} />}
       label="Keyword"
+      value={keyword || ""}
+      focus
       onChange={setKeyword}
     />
     <Button

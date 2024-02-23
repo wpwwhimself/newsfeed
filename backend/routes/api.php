@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PreferencesController;
 use Illuminate\Http\Request;
@@ -32,7 +33,11 @@ Route::controller(AuthController::class)->group(function () {
     });
 });
 
-Route::middleware("auth:sanctum")->controller(PreferencesController::class)->prefix("preference")->group(function () {
+Route::controller(PreferencesController::class)->prefix("preference")->middleware("auth:sanctum")->group(function () {
     Route::get("/", "list");
     Route::post("/update", "update");
+});
+
+Route::controller(ArticlesController::class)->prefix("article")->group(function () {
+    Route::get("/", "list");
 });

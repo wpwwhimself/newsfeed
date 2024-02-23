@@ -5,7 +5,7 @@ import { ArticleList } from './components/ArticleList';
 import { Pill } from './components/Pill';
 import { PopUp } from './components/PopUp';
 import { Button } from './components/Button';
-import { PopUpProps, PopUpSwitchProps } from './types';
+import { FilterProps, PopUpProps, PopUpSwitchProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faNewspaper, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { UserPanel } from './components/UserPanel';
@@ -15,10 +15,12 @@ import { rqGet } from './helpers/fetch';
 
 export const PopUpContext = createContext({} as PopUpProps)
 export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpVisible: (x: boolean) => {}} as PopUpSwitchProps)
+export const FilterContext = createContext({ filters: {} as FilterProps, setFilters: (x: FilterProps) => {}})
 
 function App() {
   const [popUpContent, setPopUpContent] = useState({} as PopUpProps)
   const [popUpVisible, setPopUpVisible] = useState(false)
+  const [filters, setFilters] = useState({} as FilterProps)
 
   useEffect(() => {
     rqGet("hellothere").then(res => console.debug(res))
@@ -54,6 +56,7 @@ function App() {
   return (
     <PopUpContext.Provider value={popUpContent}>
     <PopUpSwitchContext.Provider value={{ popUpVisible, setPopUpVisible }}>
+    <FilterContext.Provider value={{ filters, setFilters }}>
 
     <div className="App flex-down">
       <TopHeader
@@ -77,6 +80,7 @@ function App() {
       <PopUp />
     </div>
 
+    </FilterContext.Provider>
     </PopUpSwitchContext.Provider>
     </PopUpContext.Provider>
   );
