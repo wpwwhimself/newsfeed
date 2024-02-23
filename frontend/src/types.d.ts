@@ -29,3 +29,15 @@ interface FilterProps {
   categories?: string[],
   sources?: string[],
 }
+
+interface ArticleProps {
+  id: number,
+  title: string,
+  description: string,
+  content: string,
+  source: string,
+  author: string,
+  url: string,
+  url_to_image: string,
+  published_at: Date,
+}

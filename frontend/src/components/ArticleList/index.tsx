@@ -1,17 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import { Pill } from "../Pill"
 import { rqGet } from "../../helpers/fetch"
-import { NotificationProps } from "../../types"
+import { ArticleProps, NotificationProps } from "../../types"
 import { Hourglass } from "../Hourglass"
-import { FilterContext } from "../../App"
+import { ArticleContext, FilterContext } from "../../App"
+import { ArticleTile } from "../ArticleTile"
 
 export const ArticleList = () => {
-  const [articles, setArticles] = useState<string[]>([])
+  const [articles, setArticles] = useState<ArticleProps[]>([])
 
   const [loaderVisible, setLoaderVisible] = useState(true)
   const [notifications, setNotifications] = useState<NotificationProps>()
 
   const {filters} = useContext(FilterContext)
+  const {setArticle} = useContext(ArticleContext)
 
   const prepareForRequest = () => {
     setLoaderVisible(true)
@@ -31,12 +33,22 @@ export const ArticleList = () => {
       })
   }
 
+  const openArticle = (article: ArticleProps) => {
+    setArticle(article)
+  }
+
   useEffect(() => {
     loadArticles()
   }, [filters])
 
   return <Pill>
-    {loaderVisible && <Hourglass />}
-    {articles}
+    {loaderVisible ? <Hourglass /> : <>
+      {articles.map((article, i) =>
+        <ArticleTile key={i}
+          article={article}
+          onClick={() => openArticle(article)}
+        />
+      )}
+    </>}
   </Pill>
 }
