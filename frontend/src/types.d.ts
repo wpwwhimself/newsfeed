@@ -24,8 +24,8 @@ interface PreferencesSettersDict {
 
 interface FilterProps {
   keyword?: string,
-  dateFrom?: Date,
-  dateTo?: Date,
+  dateFrom?: string,
+  dateTo?: string,
   categories?: string[],
   sources?: string[],
 }

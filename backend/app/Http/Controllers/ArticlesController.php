@@ -10,7 +10,19 @@ class ArticlesController extends Controller
         $articles = ["Now I'm returning everything I have"];
 
         if ($rq->keyword) {
-            $articles[0] .= ", with keyword " . $rq->keyword;
+            $articles[] = "with keyword " . $rq->keyword;
+        }
+        if ($rq->dateFrom) {
+            $articles[] = "since " . $rq->dateFrom;
+        }
+        if ($rq->dateTo) {
+            $articles[] = "until " . $rq->dateTo;
+        }
+        if ($rq->categories) {
+            $articles[] = "from categories " . $rq->categories;
+        }
+        if ($rq->sources) {
+            $articles[] = "from categories " . $rq->sources;
         }
 
         return response()->json([
