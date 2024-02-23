@@ -25,7 +25,7 @@ function App() {
   const [article, setArticle] = useState({} as ArticleProps)
 
   useEffect(() => {
-    // rqGet("hellothere").then(res => console.debug(res))
+    rqGet("hellothere").then(res => console.debug(res))
   }, [])
 
   const openPopUp = (popUpContent: PopUpProps) => {

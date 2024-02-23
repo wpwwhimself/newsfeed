@@ -5,6 +5,7 @@ import { ArticleProps, NotificationProps } from "../../types"
 import { Hourglass } from "../Hourglass"
 import { ArticleContext, FilterContext } from "../../App"
 import { ArticleTile } from "../ArticleTile"
+import { Notification } from "../Notification"
 
 export const ArticleList = () => {
   const [articles, setArticles] = useState<ArticleProps[]>([])
@@ -39,10 +40,12 @@ export const ArticleList = () => {
 
   useEffect(() => {
     loadArticles()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 
   return <Pill>
     {loaderVisible ? <Hourglass /> : <>
+      {notifications && <Notification notification={notifications} />}
       {articles.map((article, i) =>
         <ArticleTile key={i}
           article={article}

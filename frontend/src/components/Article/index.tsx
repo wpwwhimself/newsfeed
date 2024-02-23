@@ -1,4 +1,3 @@
-import { useContext } from "react"
 import { ArticleProps } from "../../types"
 import { Notification } from "../Notification"
 import { Pill } from "../Pill"

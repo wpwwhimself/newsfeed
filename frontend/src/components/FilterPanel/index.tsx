@@ -13,7 +13,7 @@ export const FilterPanel = () => {
   const [sources, setSources] = useState<string[]>()
 
   const {filters, setFilters} = useContext(FilterContext)
-  const {popUpVisible, setPopUpVisible} = useContext(PopUpSwitchContext)
+  const {setPopUpVisible} = useContext(PopUpSwitchContext)
 
   useEffect(() => {
     console.log(filters)
@@ -41,7 +41,6 @@ export const FilterPanel = () => {
 
   return <div className="inputs flex-down">
     <span className="title level-3">By date</span>
-    {dateFrom}
     <Input
       type="date"
       icon={<FontAwesomeIcon icon={faCalendar} />}

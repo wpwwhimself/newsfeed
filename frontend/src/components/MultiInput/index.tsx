@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import "./style.css"
 import { Button } from "../Button"
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"

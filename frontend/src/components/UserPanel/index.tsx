@@ -109,6 +109,7 @@ export const UserPanel = () => {
 
   useEffect(() => {
     prepareForAuth()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <div className="user-panel flex-down">
