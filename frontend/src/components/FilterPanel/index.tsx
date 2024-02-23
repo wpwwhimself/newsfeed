@@ -1,31 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Input } from "../Input"
-import { faAnglesRight, faBullhorn, faCalendar, faFolderTree } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faBullhorn, faCalendar, faFolderTree, faRotateLeft } from "@fortawesome/free-solid-svg-icons"
 import { useContext, useEffect, useState } from "react"
 import { Button } from "../Button"
-import { FilterContext, PopUpSwitchContext } from "../../App"
+import { ArticleContext, FilterContext, PopUpSwitchContext } from "../../App"
+import { MultiCheckbox } from "../MultiCheckbox"
 
 
 export const FilterPanel = () => {
   const [dateFrom, setDateFrom] = useState<string>()
   const [dateTo, setDateTo] = useState<string>()
   const [categories, setCategories] = useState<string[]>()
+  const [categoriesAvailable, setCategoriesAvailable] = useState<string[]>()
   const [sources, setSources] = useState<string[]>()
+  const [sourcesAvailable, setSourcesAvailable] = useState<string[]>()
 
   const {filters, setFilters} = useContext(FilterContext)
   const {setPopUpVisible} = useContext(PopUpSwitchContext)
+  const {currentCategories, currentSources} = useContext(ArticleContext)
 
   useEffect(() => {
-    console.log(filters)
-
     setDateFrom(filters.dateFrom)
-    setDateFrom(filters.dateTo)
+    setDateTo(filters.dateTo)
     setCategories(filters.categories)
-    setSources(filters.categories)
-  }, [filters])
+    setSources(filters.sources)
+    setCategoriesAvailable(currentCategories)
+    setSourcesAvailable(currentSources)
+  }, [filters, currentCategories, currentSources])
 
-  const changeCategories = () => {
-
+  const resetFilters = () => {
+    setDateFrom("")
+    setDateTo("")
+    setCategories([])
+    setSources([])
   }
 
   const submitForm = () => {
@@ -40,34 +47,43 @@ export const FilterPanel = () => {
   }
 
   return <div className="inputs flex-down">
-    <span className="title level-3">By date</span>
+    <Button
+      icon={<FontAwesomeIcon icon={faRotateLeft} />}
+      label="Reset filters"
+      onClick={resetFilters}
+    />
+
     <Input
       type="date"
       icon={<FontAwesomeIcon icon={faCalendar} />}
-      label="From"
+      label="Date from"
       value={dateFrom || ""}
+      max={dateTo}
       onChange={setDateFrom}
     />
     <Input
       type="date"
       icon={<FontAwesomeIcon icon={faCalendar} />}
-      label="To"
+      label="Date to"
       value={dateTo || ""}
+      min={dateFrom}
       onChange={setDateTo}
     />
 
-    <span className="title level-3">By category</span>
-    <Input
+    <MultiCheckbox
       icon={<FontAwesomeIcon icon={faFolderTree} />}
       label="Categories"
-      onChange={changeCategories}
+      value={categories}
+      allValues={categoriesAvailable || []}
+      onChange={setCategories}
     />
 
-    <span className="title level-3">By source</span>
-    <Input
+    <MultiCheckbox
       icon={<FontAwesomeIcon icon={faBullhorn} />}
       label="Sources"
-      onChange={changeCategories}
+      value={sources}
+      allValues={sourcesAvailable || []}
+      onChange={setSources}
     />
 
     <Button

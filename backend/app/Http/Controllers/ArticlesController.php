@@ -10,6 +10,8 @@ class ArticlesController extends Controller
     public function list(Request $rq) {
         $test = "Now I'm returning everything I have";
         $articles = [];
+        $categories = ["test", "test2", "ever"];
+        $sources = ["s1", "s4"];
 
         if ($rq->keyword) {
             $test .= " • with keyword " . $rq->keyword;
@@ -24,7 +26,7 @@ class ArticlesController extends Controller
             $test .= " • from categories " . $rq->categories;
         }
         if ($rq->sources) {
-            $test .= " • from categories " . $rq->sources;
+            $test .= " • from sources " . $rq->sources;
         }
 
         $articles = [
@@ -40,8 +42,10 @@ class ArticlesController extends Controller
             ],
         ];
 
-        return response()->json([
-            "articles" => $articles,
-        ]);
+        return response()->json(compact(
+            "articles",
+            "categories",
+            "sources",
+        ));
     }
 }

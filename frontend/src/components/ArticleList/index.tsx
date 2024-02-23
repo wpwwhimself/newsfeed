@@ -14,7 +14,7 @@ export const ArticleList = () => {
   const [notifications, setNotifications] = useState<NotificationProps>()
 
   const {filters} = useContext(FilterContext)
-  const {setArticle} = useContext(ArticleContext)
+  const {setCurrentCategories, setCurrentSources, setArticle} = useContext(ArticleContext)
 
   const prepareForRequest = () => {
     setLoaderVisible(true)
@@ -27,6 +27,8 @@ export const ArticleList = () => {
     rqGet("article", filters)
       .then(res => {
         setArticles(res.data.articles)
+        setCurrentCategories(res.data.categories)
+        setCurrentSources(res.data.sources)
       }).catch(err => {
         setNotifications({ mode: "error", content: err.response.data.message })
       }).finally(() => {

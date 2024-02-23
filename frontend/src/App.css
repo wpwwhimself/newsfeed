@@ -60,6 +60,9 @@
   &.tight {
     gap: 0.25em;
   }
+  &.wrap {
+    flex-wrap: wrap;
+  }
 }
 .flex-right {
   flex-direction: row;

@@ -16,13 +16,21 @@ import { Article } from './components/Article';
 export const PopUpContext = createContext({} as PopUpProps)
 export const PopUpSwitchContext = createContext({ popUpVisible: false, setPopUpVisible: (x: boolean) => {}} as PopUpSwitchProps)
 export const FilterContext = createContext({ filters: {} as FilterProps, setFilters: (x: FilterProps) => {}})
-export const ArticleContext = createContext({ setArticle: (x: ArticleProps) => {}})
+export const ArticleContext = createContext({
+  currentCategories: [] as string[],
+  currentSources: [] as string[],
+  setCurrentCategories: (x: string[]) => {},
+  setCurrentSources: (x: string[]) => {},
+  setArticle: (x: ArticleProps) => {},
+})
 
 function App() {
   const [popUpContent, setPopUpContent] = useState({} as PopUpProps)
   const [popUpVisible, setPopUpVisible] = useState(false)
   const [filters, setFilters] = useState({} as FilterProps)
   const [article, setArticle] = useState({} as ArticleProps)
+  const [currentCategories, setCurrentCategories] = useState<string[]>([])
+  const [currentSources, setCurrentSources] = useState<string[]>([])
 
   useEffect(() => {
     rqGet("hellothere").then(res => console.debug(res))
@@ -37,7 +45,13 @@ function App() {
     <PopUpContext.Provider value={popUpContent}>
     <PopUpSwitchContext.Provider value={{ popUpVisible, setPopUpVisible }}>
     <FilterContext.Provider value={{ filters, setFilters }}>
-    <ArticleContext.Provider value={{ setArticle }}>
+    <ArticleContext.Provider value={{
+      currentCategories,
+      currentSources,
+      setCurrentCategories,
+      setCurrentSources,
+      setArticle
+    }}>
 
     <div className="App flex-down">
       <TopHeader
