@@ -80,6 +80,7 @@ class ArticlesController extends Controller
         $response = Http::get("https://newsapi.org/v2/everything", [
             "q" => "$topic",
             "from" => $last_updated,
+            "language" => "en",
             "apiKey" => env("NEWSAPI_APIKEY"),
         ]);
 

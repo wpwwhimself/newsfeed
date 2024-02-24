@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react"
+import "./style.css"
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { Pill } from "../Pill"
 import { rqGet } from "../../helpers/fetch"
 import { ArticleProps, NotificationProps } from "../../types"
@@ -8,16 +9,20 @@ import { ArticleTile } from "../ArticleTile"
 import { Notification } from "../Notification"
 import { Button } from "../Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
+import { faRotateRight, faXmark } from "@fortawesome/free-solid-svg-icons"
 
-export const ArticleList = () => {
+interface Props {
+  setArticleListVisible: Dispatch<SetStateAction<boolean>>,
+}
+
+export const ArticleList = ({setArticleListVisible}: Props) => {
   const [articles, setArticles] = useState<ArticleProps[]>([])
 
   const [loaderVisible, setLoaderVisible] = useState(true)
   const [notifications, setNotifications] = useState<NotificationProps>()
 
   const {filters} = useContext(FilterContext)
-  const {setCurrentCategories, setCurrentSources, setArticle} = useContext(ArticleContext)
+  const {setCurrentCategories, setCurrentSources, showArticle} = useContext(ArticleContext)
 
   const prepareForRequest = () => {
     setLoaderVisible(true)
@@ -39,30 +44,34 @@ export const ArticleList = () => {
       })
   }
 
-  const openArticle = (article: ArticleProps) => {
-    setArticle(article)
-  }
-
   useEffect(() => {
     loadArticles()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 
   return <Pill>
-    {loaderVisible ? <Hourglass /> : <div className="flex-down">
+    {loaderVisible ? <Hourglass /> : <div className="list-container flex-down">
       {notifications && <Notification notification={notifications} />}
 
-      <Button
-        icon={<FontAwesomeIcon icon={faRotateRight} />}
-        onClick={loadArticles}
-      />
-
-      {articles.map((article, i) =>
-        <ArticleTile key={i}
-          article={article}
-          onClick={() => openArticle(article)}
+      <div className="flex-right stretch">
+        <Button
+          icon={<FontAwesomeIcon icon={faRotateRight} />}
+          onClick={loadArticles}
         />
-      )}
+        <Button
+          icon={<FontAwesomeIcon icon={faXmark} />}
+          onClick={() => setArticleListVisible(false)}
+        />
+      </div>
+
+      <div className="flex-down list">
+        {articles.map((article, i) =>
+          <ArticleTile key={i}
+            article={article}
+            onClick={() => showArticle(article)}
+          />
+        )}
+      </div>
     </div>}
   </Pill>
 }

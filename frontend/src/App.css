@@ -43,8 +43,24 @@
 }
 
 .main-wrapper {
-  display: grid;
-  grid-template-columns: 300px 3fr;
+  justify-content: center;
+}
+.sidebar {
+  --sidebar-width: 300px;
+  position: fixed;
+  max-width: var(--sidebar-width);
+  height: calc(100vh - 2em);
+  right: 1em;
+  translate: calc(var(--sidebar-width) + 1em) 0;
+
+  &.open {
+    translate: 0;
+    backdrop-filter: blur(--0.75em);
+  }
+}
+.main-content {
+  width: calc(100vw - 2em);
+  max-width: 1200px;
 }
 
 .flex-right, .flex-down {

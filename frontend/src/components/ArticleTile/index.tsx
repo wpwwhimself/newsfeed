@@ -12,8 +12,8 @@ export const ArticleTile = ({article, onClick}: Props) => {
 
   return <div className="article-tile flex-down tight" onClick={onClick}>
     <img src={url_to_image} alt={title} />
-    <span className="title level-3 accent">{title}</span>
-    <span>{description}</span>
+    <span className="title level-3">{title}</span>
+    {/* <span>{description}</span> */}
     <span className="ghost">{date(published_at)}</span>
   </div>
 }
