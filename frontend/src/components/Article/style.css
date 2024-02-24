@@ -1,0 +1,5 @@
+.article img {
+  width: max-content;
+  max-height: 50vh;
+  align-self: center;
+}
