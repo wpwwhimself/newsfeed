@@ -14,25 +14,22 @@ use Illuminate\Support\Facades\Http;
 class ArticlesController extends Controller
 {
     public function list(Request $rq) {
-        $test = "Now I'm returning everything I have";
-        $articles = [];
-        $categories = ["test", "test2", "ever"];
-        $sources = ["s1", "s4"];
+        $articles = Article::orderByDesc("published_at")->get();
 
         if ($rq->keyword) {
-            $test .= " • with keyword " . $rq->keyword;
+            // $articles = $articles->where("")
         }
         if ($rq->dateFrom) {
-            $test .= " • since " . $rq->dateFrom;
+            // $test .= " • since " . $rq->dateFrom;
         }
         if ($rq->dateTo) {
-            $test .= " • until " . $rq->dateTo;
+            // $test .= " • until " . $rq->dateTo;
         }
         if ($rq->categories) {
-            $test .= " • from categories " . $rq->categories;
+            // $test .= " • from categories " . $rq->categories;
         }
         if ($rq->sources) {
-            $test .= " • from sources " . $rq->sources;
+            // $test .= " • from sources " . $rq->sources;
         }
 
         if (Auth::check() && UserPreference::where("user_id", Auth::id())->count()) {
@@ -44,23 +41,13 @@ class ArticlesController extends Controller
                     ->get()
                 ;
                 if ($prefs->count()) {
-                    $test .= " • from user's $type " . $prefs->implode("value", ",");
+                    // $test .= " • from user's $type " . $prefs->implode("value", ",");
                 }
             }
         }
 
-        $articles = [
-            [
-                "title" => "Boobs",
-                "description" => $test,
-                "content" => "Cillum eiusmod amet non adipisicing laboris dolor magna Lorem aliqua dolore. Ad minim sit fugiat nulla labore id nulla non est esse ea consectetur sit dolor. Non nostrud ipsum laborum id eiusmod duis cupidatat minim eiusmod ad aute esse ex. Velit irure cupidatat reprehenderit irure exercitation magna ullamco proident. Consectetur adipisicing laboris sint irure duis ullamco labore officia anim mollit officia ea. Ullamco aliquip sit ad proident pariatur enim.",
-                "source" => "my brain",
-                "author" => "Tomasz Torpeda",
-                "url" => "http://test.test/",
-                "url_to_image" => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNlGaKuBp12MkLX0gKzZLkV1ZAcry1_nWZpeMLs_c7HQ&s",
-                "published_at" => Carbon::now(),
-            ],
-        ];
+        $categories = ["test", "test2", "ever"];
+        $sources = ["s1", "s4"];
 
         return response()->json(compact(
             "articles",
@@ -76,38 +63,43 @@ class ArticlesController extends Controller
             "politics",
         ];
 
-        $last_updated = Setting::find("last_data_sync")?->get("value")
-            ?? Carbon::now()->subWeek();
+        $last_updated = Setting::find("last_data_sync")?->value("value")
+            ?? Carbon::now()->subWeek()->toIso8601String();
 
+        $pull_count = 0;
         foreach ($topics as $topic) {
-            $this->obtainFromNewsAPI($topic, $last_updated);
-
+            $pull_count += $this->obtainFromNewsAPI($topic, $last_updated);
         }
 
-        Setting::find("last_data_sync")->update(["value" => Carbon::now()]);
+        Setting::find("last_data_sync")->update(["value" => Carbon::now()->toIso8601String()]);
 
-        return response()->json(["message" => "Articles updated"]);
+        return response()->json(["message" => "Articles updated", "pull_count" => $pull_count]);
     }
 
-    private function obtainFromNewsAPI(string $topic, string | Carbon $last_updated) {
+    private function obtainFromNewsAPI(string $topic, string $last_updated) {
         $response = Http::get("https://newsapi.org/v2/everything", [
-            "q" => $topic,
+            "q" => "$topic",
             "from" => $last_updated,
             "apiKey" => env("NEWSAPI_APIKEY"),
         ]);
 
         Article::insert(
-            Arr::map($response->json()["articles"], fn($article) => [
-                "title" => $article["title"],
-                "description" => $article["description"],
-                "content" => $article["content"],
-                "source" => $article["source"]["name"],
-                "category" => $topic,
-                "author" => $article["author"],
-                "url" => $article["url"],
-                "url_to_image" => $article["urlToImage"],
-                "published_at" => Carbon::parse($article["publishedAt"]),
-            ])
+            array_filter(
+                Arr::map($response->json()["articles"], fn($article) => [
+                    "title" => $article["title"],
+                    "description" => $article["description"],
+                    "content" => $article["content"],
+                    "source" => $article["source"]["name"],
+                    "category" => $topic,
+                    "author" => $article["author"],
+                    "url" => $article["url"],
+                    "url_to_image" => $article["urlToImage"],
+                    "published_at" => Carbon::parse($article["publishedAt"]),
+                ]),
+                fn($article) => $article["title"] != "[Removed]"
+            )
         );
+
+        return count($response->json()["articles"]);
     }
 }
