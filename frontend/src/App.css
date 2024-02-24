@@ -48,7 +48,7 @@
 .sidebar {
   --sidebar-width: 300px;
   position: fixed;
-  max-width: var(--sidebar-width);
+  width: var(--sidebar-width);
   height: calc(100vh - 2em);
   right: 1em;
   translate: calc(var(--sidebar-width) + 1em) 0;

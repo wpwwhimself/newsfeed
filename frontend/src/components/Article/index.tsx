@@ -10,7 +10,7 @@ interface Props {
 export const Article = ({article}: Props) => {
   if (!article?.title)
     return <Pill>
-      <Notification notification={{ mode: "info", content: "Choose an article" }} />
+      <Notification notification={{ mode: "info", content: "Choose an article from the list" }} />
     </Pill>
 
   const {title, description, content, source, author, url, url_to_image, published_at} = article

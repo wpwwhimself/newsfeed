@@ -5,3 +5,7 @@
 .list {
   overflow: auto;
 }
+
+.buttons {
+  align-items: center;
+}

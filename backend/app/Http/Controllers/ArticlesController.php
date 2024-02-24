@@ -8,51 +8,68 @@ use App\Models\UserPreference;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class ArticlesController extends Controller
 {
     public function list(Request $rq) {
-        $articles = Article::orderByDesc("published_at")->get();
+        $articles = Article::orderByDesc("published_at");
+        $filters = [];
 
         if ($rq->keyword) {
-            // $articles = $articles->where("")
+            $filters["keyword"] = $rq->keyword;
+            $articles = $articles->where("title", "regexp", $rq->keyword)
+                ->orWhere("description", "regexp", $rq->keyword)
+                ->orWhere("content", "regexp", $rq->keyword)
+            ;
         }
         if ($rq->dateFrom) {
-            // $test .= " • since " . $rq->dateFrom;
+            $filters["dateFrom"] = $rq->dateFrom;
+            $articles = $articles->where("published_at", ">=", $rq->dateFrom);
         }
         if ($rq->dateTo) {
-            // $test .= " • until " . $rq->dateTo;
+            $filters["dateTo"] = $rq->dateTo;
+            $articles = $articles->where("published_at", "<=", $rq->dateTo);
         }
+
+        $_articles = clone $articles;
+        $categories = $_articles->get()->pluck("category")->unique()->values();
+        $sources = $_articles->get()->pluck("source")->unique()->values();
+
         if ($rq->categories) {
-            // $test .= " • from categories " . $rq->categories;
+            $_categories = explode(",", $rq->categories);
+            $filters["categories"] = $_categories;
+            $articles = $articles->whereIn("category", $_categories);
         }
         if ($rq->sources) {
-            // $test .= " • from sources " . $rq->sources;
+            $_sources = explode(",", $rq->sources);
+            $filters["sources"] = $_sources;
+            $articles = $articles->whereIn("source", $_sources);
         }
 
         if (Auth::check() && UserPreference::where("user_id", Auth::id())->count()) {
             foreach (["sources", "categories", "authors"] as $type) {
                 $prefs = UserPreference::where("user_id", Auth::id())
-                    ->whereHas("type", function ($q) use ($type) {
-                        $q->where("name", $type);
-                    })
+                    ->whereHas("type", function ($q) use ($type) { $q->where("name", $type); })
                     ->get()
                 ;
                 if ($prefs->count()) {
-                    // $test .= " • from user's $type " . $prefs->implode("value", ",");
+                    $_prefs = $prefs->pluck("value")->values();
+                    $filters["user_$type"] = $_prefs;
+                    $articles = $articles->whereIn(Str::singular($type), $_prefs);
                 }
             }
         }
 
-        $categories = ["test", "test2", "ever"];
-        $sources = ["s1", "s4"];
+        $articles = $articles->get();
 
         return response()->json(compact(
             "articles",
             "categories",
             "sources",
+            "filters",
         ));
     }
 

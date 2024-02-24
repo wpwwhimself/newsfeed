@@ -35,6 +35,9 @@ export const ArticleList = ({setArticleListVisible}: Props) => {
     rqGet("article", filters)
       .then(res => {
         setArticles(res.data.articles)
+        if (res.data.articles.length === 0) {
+          setNotifications({ mode: "info", content: "No articles found"})
+        }
         setCurrentCategories(res.data.categories)
         setCurrentSources(res.data.sources)
       }).catch(err => {
@@ -51,18 +54,19 @@ export const ArticleList = ({setArticleListVisible}: Props) => {
 
   return <Pill>
     {loaderVisible ? <Hourglass /> : <div className="list-container flex-down">
-      {notifications && <Notification notification={notifications} />}
-
-      <div className="flex-right stretch">
+      <div className="buttons flex-right stretch">
         <Button
           icon={<FontAwesomeIcon icon={faRotateRight} />}
           onClick={loadArticles}
         />
+        <span className="ghost">{articles.length} article{articles.length !== 1 && "s"}</span>
         <Button
           icon={<FontAwesomeIcon icon={faXmark} />}
           onClick={() => setArticleListVisible(false)}
         />
       </div>
+
+      {notifications && <Notification notification={notifications} />}
 
       <div className="flex-down list">
         {articles.map((article, i) =>

@@ -38,10 +38,10 @@ export const FilterPanel = () => {
   const submitForm = () => {
     setFilters({
       ...filters,
-      dateFrom: dateFrom,
-      dateTo: dateTo,
-      categories: categories,
-      sources: sources,
+      dateFrom: dateFrom || "",
+      dateTo: dateTo || "",
+      categories: categories || [],
+      sources: sources || [],
     })
     setPopUpVisible(false)
   }

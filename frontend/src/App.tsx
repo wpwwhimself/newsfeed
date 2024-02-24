@@ -34,7 +34,7 @@ function App() {
   const [articleListVisible, setArticleListVisible] = useState(false)
 
   useEffect(() => {
-    rqGet("hellothere").then(res => console.debug(res))
+    rqGet("hellothere").then(res => console.debug(res.data))
   }, [])
 
   const openPopUp = (popUpContent: PopUpProps) => {
