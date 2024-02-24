@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use App\Models\Setting;
 use App\Models\UserPreference;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class ArticlesController extends Controller
 {
@@ -63,5 +67,47 @@ class ArticlesController extends Controller
             "categories",
             "sources",
         ));
+    }
+
+    public function obtain() {
+        $topics = [
+            "cooking",
+            "finance",
+            "politics",
+        ];
+
+        $last_updated = Setting::find("last_data_sync")?->get("value")
+            ?? Carbon::now()->subWeek();
+
+        foreach ($topics as $topic) {
+            $this->obtainFromNewsAPI($topic, $last_updated);
+
+        }
+
+        Setting::find("last_data_sync")->update(["value" => Carbon::now()]);
+
+        return response()->json(["message" => "Articles updated"]);
+    }
+
+    private function obtainFromNewsAPI(string $topic, string | Carbon $last_updated) {
+        $response = Http::get("https://newsapi.org/v2/everything", [
+            "q" => $topic,
+            "from" => $last_updated,
+            "apiKey" => env("NEWSAPI_APIKEY"),
+        ]);
+
+        Article::insert(
+            Arr::map($response->json()["articles"], fn($article) => [
+                "title" => $article["title"],
+                "description" => $article["description"],
+                "content" => $article["content"],
+                "source" => $article["source"]["name"],
+                "category" => $topic,
+                "author" => $article["author"],
+                "url" => $article["url"],
+                "url_to_image" => $article["urlToImage"],
+                "published_at" => Carbon::parse($article["publishedAt"]),
+            ])
+        );
     }
 }
