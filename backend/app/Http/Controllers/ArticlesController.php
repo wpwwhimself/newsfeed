@@ -85,8 +85,8 @@ class ArticlesController extends Controller
 
         $report = [];
         foreach ($topics as $topic) {
-            // $report["newsapi"] = $this->obtainFromNewsAPI($topic, $last_updated);
-            // $report["theguardian"] = $this->obtainFromTheGuardian($topic, $last_updated);
+            $report["newsapi"] = $this->obtainFromNewsAPI($topic, $last_updated);
+            $report["theguardian"] = $this->obtainFromTheGuardian($topic, $last_updated);
             $report["newyorktimes"] = $this->obtainFromNewYorkTimes($topic, $last_updated);
         }
 
