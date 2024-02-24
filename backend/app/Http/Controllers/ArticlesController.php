@@ -83,14 +83,16 @@ class ArticlesController extends Controller
         $last_updated = Setting::find("last_data_sync")?->value("value")
             ?? Carbon::now()->subWeek()->toIso8601String();
 
-        $pull_count = 0;
+        $report = [];
         foreach ($topics as $topic) {
-            $pull_count += $this->obtainFromNewsAPI($topic, $last_updated);
+            // $report["newsapi"] = $this->obtainFromNewsAPI($topic, $last_updated);
+            // $report["theguardian"] = $this->obtainFromTheGuardian($topic, $last_updated);
+            $report["newyorktimes"] = $this->obtainFromNewYorkTimes($topic, $last_updated);
         }
 
         Setting::find("last_data_sync")->update(["value" => Carbon::now()->toIso8601String()]);
 
-        return response()->json(["message" => "Articles updated", "pull_count" => $pull_count]);
+        return response()->json(["message" => "Articles updated", "report" => $report]);
     }
 
     private function obtainFromNewsAPI(string $topic, string $last_updated) {
@@ -100,6 +102,13 @@ class ArticlesController extends Controller
             "language" => "en",
             "apiKey" => env("NEWSAPI_APIKEY"),
         ]);
+
+        $report = [
+            "status" => $response->status(),
+            "details" => $response->json(),
+        ];
+
+        if (!$response->successful()) return $report;
 
         Article::insert(
             array_filter(
@@ -118,6 +127,80 @@ class ArticlesController extends Controller
             )
         );
 
-        return count($response->json()["articles"]);
+        $report["summary"] = "Pulled ".count($response->json()["articles"])." articles";
+
+        return $report;
+    }
+
+    private function obtainFromTheGuardian(string $topic, string $last_updated) {
+        $response = Http::get("https://content.guardianapis.com/search", [
+            "q" => "$topic",
+            "from" => $last_updated,
+            "api-key" => env("THEGUARDIAN_APIKEY"),
+        ]);
+
+        $report = [
+            "status" => $response->status(),
+            "details" => $response->json(),
+        ];
+
+        if (!$response->successful()) return $report;
+
+        Article::insert(
+            array_filter(
+                Arr::map($response->json()["response"]["results"], fn($article) => [
+                    "title" => $article["webTitle"],
+                    "description" => null,
+                    "content" => null,
+                    "source" => "The Guardian",
+                    "category" => $article["sectionName"],
+                    "author" => null,
+                    "url" => $article["webUrl"],
+                    "url_to_image" => null,
+                    "published_at" => Carbon::parse($article["webPublicationDate"]),
+                ]),
+                fn($article) => $article["title"] != "[Removed]"
+            )
+        );
+
+        $report["summary"] = "Pulled ".count($response->json()["articles"])." articles";
+
+        return $report;
+    }
+
+    private function obtainFromNewYorkTimes(string $topic, string $last_updated) {
+        $response = Http::get("https://api.nytimes.com/svc/search/v2/articlesearch.json", [
+            "q" => "$topic",
+            "begin_date" => Carbon::parse($last_updated)->format("Ymd"),
+            "api-key" => env("NEWYORKTIMES_APIKEY"),
+        ]);
+
+        $report = [
+            "status" => $response->status(),
+            "details" => $response->json(),
+        ];
+
+        if (!$response->successful()) return $report;
+
+        Article::insert(
+            array_filter(
+                Arr::map($response->json()["response"]["docs"], fn($article) => [
+                    "title" => $article["headline"]["main"],
+                    "description" => $article["abstract"],
+                    "content" => null,
+                    "source" => "New York Times",
+                    "category" => $topic,
+                    "author" => str_replace("/^By /", "", $article["byline"]["original"]),
+                    "url" => $article["web_url"],
+                    "url_to_image" => null,
+                    "published_at" => Carbon::parse($article["pub_date"]),
+                ]),
+                fn($article) => $article["title"] != "[Removed]"
+            )
+        );
+
+        $report["summary"] = "Pulled ".count($response->json()["articles"])." articles";
+
+        return $report;
     }
 }
