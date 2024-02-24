@@ -1,5 +1,5 @@
 import "./style.css"
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Pill } from "../Pill"
 import { rqGet } from "../../helpers/fetch"
 import { ArticleProps, NotificationProps } from "../../types"

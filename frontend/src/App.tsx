@@ -43,7 +43,7 @@ function App() {
 
   const checkAuth = () => {
     rqGet("me").then(res => {
-      setAuthData(res.data == "" ? {} : res.data)
+      setAuthData(res.data === "" ? {} : res.data)
     })
   }
 
