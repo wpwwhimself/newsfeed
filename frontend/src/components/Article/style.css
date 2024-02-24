@@ -1,5 +1,5 @@
 .article img {
   width: max-content;
-  max-height: 50vh;
+  max-height: min(50vh, 50vw);
   align-self: center;
 }

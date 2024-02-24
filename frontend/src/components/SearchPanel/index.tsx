@@ -20,7 +20,7 @@ export const SearchPanel = () => {
     setPopUpVisible(false)
   }
 
-  return <div className="inputs flex-down">
+  return <div className="inputs flex-down center">
     
     <Input
       icon={<FontAwesomeIcon icon={faKey} />}

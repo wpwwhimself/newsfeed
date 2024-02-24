@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import './App.css';
+import './mobile.css';
 import { TopHeader } from './components/TopHeader';
 import { ArticleList } from './components/ArticleList';
 import { PopUp } from './components/PopUp';
@@ -92,7 +93,9 @@ function App() {
                 content: <UserPanel />,
                 icon: <FontAwesomeIcon icon={faUser} />,
               })} />
-              <Button icon={<FontAwesomeIcon icon={faList} />} onClick={toggleArticleList} />
+              <div className="wide-hide">
+                <Button icon={<FontAwesomeIcon icon={faList} />} onClick={toggleArticleList} />
+              </div>
             </>}
             icon={<FontAwesomeIcon icon={faNewspaper} />}
           />

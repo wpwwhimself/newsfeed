@@ -25,7 +25,7 @@ export const Article = ({article}: Props) => {
 
   return <Pill>
     <div className="article flex-down">
-      <img src={url_to_image} alt={title} />
+      {url_to_image && <img src={url_to_image} alt={title} />}
       <span className="title level-2 accent">{title}</span>
       <span className="title level-3">{description}</span>
       <span className="ghost">by {author} • {date(published_at)}</span>

@@ -9,7 +9,7 @@ import { ArticleTile } from "../ArticleTile"
 import { Notification } from "../Notification"
 import { Button } from "../Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faRotateRight, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
 interface Props {
   setArticleListVisible: Dispatch<SetStateAction<boolean>>,
@@ -60,10 +60,12 @@ export const ArticleList = ({setArticleListVisible}: Props) => {
           onClick={loadArticles}
         />
         <span className="ghost">{articles.length} article{articles.length !== 1 && "s"}</span>
-        <Button
-          icon={<FontAwesomeIcon icon={faXmark} />}
-          onClick={() => setArticleListVisible(false)}
-        />
+        <div className="wide-hide">
+          <Button
+            icon={<FontAwesomeIcon icon={faAnglesRight} />}
+            onClick={() => setArticleListVisible(false)}
+          />
+        </div>
       </div>
 
       {notifications && <Notification notification={notifications} />}

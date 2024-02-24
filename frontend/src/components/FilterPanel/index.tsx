@@ -46,7 +46,7 @@ export const FilterPanel = () => {
     setPopUpVisible(false)
   }
 
-  return <div className="inputs flex-down">
+  return <div className="inputs flex-down center">
     <Button
       icon={<FontAwesomeIcon icon={faRotateLeft} />}
       label="Reset filters"

@@ -35,8 +35,8 @@ class ArticlesController extends Controller
         }
 
         $_articles = clone $articles;
-        $categories = $_articles->get()->pluck("category")->unique()->values();
-        $sources = $_articles->get()->pluck("source")->unique()->values();
+        $categories = $_articles->get()->pluck("category")->unique()->sort()->values();
+        $sources = $_articles->get()->pluck("source")->unique()->sort()->values();
 
         if ($rq->categories) {
             $_categories = explode(",", $rq->categories);

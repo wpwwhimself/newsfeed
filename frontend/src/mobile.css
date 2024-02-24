@@ -1,0 +1,10 @@
+@media screen and (max-width: 450px) {
+  .top-header:has(.level-1) {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: calc(100vw - 2 * var(--padding));
+    translate: calc(100vw) 0;
+  }
+}

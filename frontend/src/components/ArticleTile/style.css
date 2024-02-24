@@ -1,3 +1,7 @@
 .article-tile {
   cursor: pointer;
+
+  &:hover .title.level-3{
+    color: hsl(var(--acc));
+  }
 }

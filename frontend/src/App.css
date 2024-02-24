@@ -2,6 +2,10 @@
 
 :root {
   --acc: 39, 100%, 50%;
+  --main-port-width: 1200px;
+  --sidebar-width: 300px;
+  --padding: 1em;
+  --blur-force: 0.75em;
 }
 * {
   transition-duration: 0.2s;
@@ -33,34 +37,33 @@
 .App {
   background-color: hsl(var(--bg1));
   color: hsl(var(--fg));
-  min-height: calc(100vh - 2em);
+  min-height: calc(100vh - 2 * var(--padding));
   font-family: "Raleway", sans-serif;
-  padding: 1em;
+  padding: var(--padding);
 }
 
 .main-wrapper, .flex-right, .flex-down {
-  gap: 1em;
+  gap: var(--padding);
 }
 
 .main-wrapper {
   justify-content: center;
 }
 .sidebar {
-  --sidebar-width: 300px;
   position: fixed;
   width: var(--sidebar-width);
-  height: calc(100vh - 2em);
-  right: 1em;
-  translate: calc(var(--sidebar-width) + 1em) 0;
+  height: calc(100vh - 2 * var(--padding));
+  right: var(--padding); top: var(--padding);
+  translate: calc(var(--sidebar-width) + var(--padding)) 0;
+  z-index: 99;
 
   &.open {
     translate: 0;
-    backdrop-filter: blur(--0.75em);
   }
 }
 .main-content {
-  width: calc(100vw - 2em);
-  max-width: 1200px;
+  width: calc(100vw - 2 * var(--padding));
+  max-width: var(--main-port-width);
 }
 
 .flex-right, .flex-down {
@@ -74,7 +77,7 @@
     justify-content: space-between;
   }
   &.tight {
-    gap: 0.25em;
+    gap: calc(var(--padding) / 4);
   }
   &.wrap {
     flex-wrap: wrap;
@@ -88,7 +91,7 @@
 }
 
 .title {
-  gap: 0.5em;
+  gap: calc(var(--padding) / 2);
   font-weight: bold;
 
   &.level-1 {
@@ -112,9 +115,15 @@
   opacity: 0.5;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (min-width: calc(1200px + 300px + 3 * 1em)) {
+  .wide-hide {
+    display: none;
+  }
   .main-wrapper {
-    display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
+  }
+  .sidebar {
+    position: static;
+    translate: 0;
   }
 }

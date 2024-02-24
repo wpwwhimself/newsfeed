@@ -42,7 +42,7 @@ export const MultiInput = ({name, label, icon, value, onChange}: Props) => {
       />
       <Button icon={<FontAwesomeIcon icon={faPlus} />} onClick={addValue} />
     </div>
-    <ul className="flex-down tight">
+    <ul className="value-list flex-down tight">
       {valueList?.map((val, i) =>
         <li key={i}>
           {val}

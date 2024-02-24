@@ -116,7 +116,7 @@ export const UserPanel = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <div className="user-panel flex-down">
+  return <div className="user-panel flex-down center">
     {["guest", "login", "register"].includes(mode!) && <>
       <span className="title level-2">You are currently not logged in</span>
 
