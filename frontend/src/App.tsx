@@ -5,9 +5,9 @@ import { TopHeader } from './components/TopHeader';
 import { ArticleList } from './components/ArticleList';
 import { PopUp } from './components/PopUp';
 import { Button } from './components/Button';
-import { ArticleProps, FilterProps, PopUpProps, PopUpSwitchProps } from './types';
+import { ArticleProps, AuthData, FilterProps, PopUpProps, PopUpSwitchProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faList, faNewspaper, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faList, faNewspaper, faSearch, faUser, faUserAlt } from '@fortawesome/free-solid-svg-icons';
 import { UserPanel } from './components/UserPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { FilterPanel } from './components/FilterPanel';
@@ -22,6 +22,7 @@ export const ArticleContext = createContext({
   currentSources: [] as string[],
   setCurrentCategories: (x: string[]) => {},
   setCurrentSources: (x: string[]) => {},
+  setArticleListVisible: (x: boolean) => {},
   showArticle: (x: ArticleProps) => {},
 })
 
@@ -33,10 +34,18 @@ function App() {
   const [currentCategories, setCurrentCategories] = useState<string[]>([])
   const [currentSources, setCurrentSources] = useState<string[]>([])
   const [articleListVisible, setArticleListVisible] = useState(false)
+  const [authData, setAuthData] = useState({} as AuthData)
 
   useEffect(() => {
     rqGet("hellothere").then(res => console.debug(res.data))
+    checkAuth()
   }, [])
+
+  const checkAuth = () => {
+    rqGet("me").then(res => {
+      setAuthData(res.data == "" ? {} : res.data)
+    })
+  }
 
   const openPopUp = (popUpContent: PopUpProps) => {
     setPopUpContent(popUpContent)
@@ -61,6 +70,7 @@ function App() {
       currentSources,
       setCurrentCategories,
       setCurrentSources,
+      setArticleListVisible,
       showArticle
     }}>
 
@@ -71,30 +81,30 @@ function App() {
           `flex-down`,
           articleListVisible && `open`,
         ].filter(Boolean).join(" ")}>
-          <ArticleList setArticleListVisible={setArticleListVisible} />
+          <ArticleList />
         </div>
         <div className="main-content flex-down">
           <TopHeader
             level={1}
             label="NewsFeed"
             buttons={<>
-              <Button icon={<FontAwesomeIcon icon={faSearch} />} onClick={() => openPopUp({
+              <Button icon={<FontAwesomeIcon icon={faSearch} />} highlighted={!!filters.keyword?.length} onClick={() => openPopUp({
                 title: "Search by keyword",
                 content: <SearchPanel />,
                 icon: <FontAwesomeIcon icon={faSearch} />,
               })} />
-              <Button icon={<FontAwesomeIcon icon={faFilter} />} onClick={() => openPopUp({
+              <Button icon={<FontAwesomeIcon icon={faFilter} />} highlighted={!!filters.dateFrom?.length || !!filters.dateTo?.length || !!filters.categories?.length || !!filters.sources?.length} onClick={() => openPopUp({
                 title: "Filter articles",
                 content: <FilterPanel />,
                 icon: <FontAwesomeIcon icon={faFilter} />,
               })} />
-              <Button icon={<FontAwesomeIcon icon={faUser} />} onClick={() => openPopUp({
+              <Button icon={<FontAwesomeIcon icon={!authData?.name ? faUserAlt : faUser} />} highlighted={authData?.preferences?.length > 0} onClick={() => openPopUp({
                 title: "User preferences",
                 content: <UserPanel />,
                 icon: <FontAwesomeIcon icon={faUser} />,
               })} />
               <div className="wide-hide">
-                <Button icon={<FontAwesomeIcon icon={faList} />} onClick={toggleArticleList} />
+                <Button icon={<FontAwesomeIcon icon={faList} />} highlighted={!article.title} onClick={toggleArticleList} />
               </div>
             </>}
             icon={<FontAwesomeIcon icon={faNewspaper} />}
@@ -102,7 +112,7 @@ function App() {
           <Article article={article} />
         </div>
       </div>
-      <PopUp />
+      <PopUp onClose={checkAuth} />
     </div>
 
     </ArticleContext.Provider>

@@ -11,18 +11,14 @@ import { Button } from "../Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAnglesRight, faRotateRight } from "@fortawesome/free-solid-svg-icons"
 
-interface Props {
-  setArticleListVisible: Dispatch<SetStateAction<boolean>>,
-}
-
-export const ArticleList = ({setArticleListVisible}: Props) => {
+export const ArticleList = () => {
   const [articles, setArticles] = useState<ArticleProps[]>([])
 
   const [loaderVisible, setLoaderVisible] = useState(true)
   const [notifications, setNotifications] = useState<NotificationProps>()
 
   const {filters} = useContext(FilterContext)
-  const {setCurrentCategories, setCurrentSources, showArticle} = useContext(ArticleContext)
+  const {setCurrentCategories, setCurrentSources, showArticle, setArticleListVisible} = useContext(ArticleContext)
 
   const prepareForRequest = () => {
     setLoaderVisible(true)

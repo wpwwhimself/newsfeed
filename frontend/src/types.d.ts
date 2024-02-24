@@ -12,6 +12,17 @@ interface ArticleProps {
   published_at: string,
 }
 
+interface AuthData {
+  id: number,
+  name: string,
+  email: string,
+  email_verified_at: Date,
+  created_at: Date,
+  updated_at: Date,
+  preferences_grouped: object,
+  preferences: object[],
+}
+
 interface FilterProps {
   keyword?: string,
   dateFrom?: string,

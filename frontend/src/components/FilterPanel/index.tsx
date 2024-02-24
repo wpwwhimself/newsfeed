@@ -17,7 +17,7 @@ export const FilterPanel = () => {
 
   const {filters, setFilters} = useContext(FilterContext)
   const {setPopUpVisible} = useContext(PopUpSwitchContext)
-  const {currentCategories, currentSources} = useContext(ArticleContext)
+  const {currentCategories, currentSources, setArticleListVisible} = useContext(ArticleContext)
 
   useEffect(() => {
     setDateFrom(filters.dateFrom)
@@ -44,6 +44,7 @@ export const FilterPanel = () => {
       sources: sources || [],
     })
     setPopUpVisible(false)
+    setArticleListVisible(true)
   }
 
   return <div className="inputs flex-down center">

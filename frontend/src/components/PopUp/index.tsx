@@ -7,11 +7,16 @@ import { TopHeader } from "../TopHeader"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 
-export const PopUp = () => {
+interface Props {
+  onClose?: () => void
+}
+
+export const PopUp = ({onClose}: Props) => {
   const popUp = useContext(PopUpContext)
   const {popUpVisible, setPopUpVisible} = useContext(PopUpSwitchContext)
 
   const closePopUp = () => {
+    if (onClose) onClose()
     setPopUpVisible(false)
   }
 
