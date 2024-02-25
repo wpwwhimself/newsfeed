@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 99;
 
   & .pop-up-inner {
     max-width: calc(90vw - 2 * var(--padding));

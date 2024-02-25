@@ -55,7 +55,7 @@
   height: calc(100vh - 2 * var(--padding));
   right: var(--padding); top: var(--padding);
   translate: calc(var(--sidebar-width) + var(--padding)) 0;
-  z-index: 99;
+  z-index: 2;
 
   &.open {
     translate: 0;
