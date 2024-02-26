@@ -11,5 +11,10 @@
     max-width: calc(90vw - 2 * var(--padding));
     max-height: calc(90vh - 2 * var(--padding));
     overflow: auto;
+
+    & .top-header {
+      flex-wrap: nowrap;
+      align-items: flex-start;
+    }
   }
 }
