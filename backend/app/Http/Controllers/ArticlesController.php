@@ -163,7 +163,7 @@ class ArticlesController extends Controller
             )
         );
 
-        $report["summary"] = "Pulled ".count($response->json()["articles"])." articles";
+        $report["summary"] = "Pulled ".count($response->json()["response"]["results"])." articles";
 
         return $report;
     }
@@ -199,7 +199,7 @@ class ArticlesController extends Controller
             )
         );
 
-        $report["summary"] = "Pulled ".count($response->json()["articles"])." articles";
+        $report["summary"] = "Pulled ".count($response->json()["response"]["docs"])." articles";
 
         return $report;
     }
