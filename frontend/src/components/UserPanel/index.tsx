@@ -118,7 +118,7 @@ export const UserPanel = () => {
 
   return <div className="user-panel flex-down center">
     {["guest", "login", "register"].includes(mode!) && <>
-      <span className="title level-2">You are currently not logged in</span>
+      <span>You are currently not logged in</span>
 
       <div className="flex-right center">
         <Button
@@ -164,7 +164,12 @@ export const UserPanel = () => {
     }
 
     {mode === "authed" && <>
-      <span className="title level-2">Browsing as: {login}</span>
+      <div className="flex-down tight center">
+        <span>Browsing as</span>
+        <span className="title level-2 accent">{login}</span>
+      </div>
+
+      <p>You can type in the names of your preferred sources/categories/authors in the fields below.</p>
 
       <div className="inputs flex-down">
         <MultiInput

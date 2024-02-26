@@ -48,6 +48,6 @@ class AuthController extends Controller
             "password" => Hash::make($userData["password"]),
         ]);
 
-        return response()->json(["message" => "User created"]);
+        return response()->json(["message" => "User created. You can now log in"]);
     }
 }
