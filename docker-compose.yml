@@ -6,7 +6,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "81:80"
     depends_on:
       - backend
   backend:
@@ -19,18 +19,23 @@ services:
     depends_on:
       - database
     environment:
-      - DB_HOST=database
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
       - DB_PORT=3306
       - DB_DATABASE=newsfeed
-      - DB_USERNAME=daemon
-      - DB_PASSWORD=7359e8xqyQtpyF9s
+      - DB_USERNAME=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - NEWSAPI_APIKEY=${NEWSAPI_APIKEY}
+      - THEGUARDIAN_APIKEY=${THEGUARDIAN_APIKEY}
+      - NEWYORKTIMES_APIKEY=${NEWYORKTIMES_APIKEY}
   database:
     container_name: mysql
-    image: mysql:5.7
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: newsfeed
-      MYSQL_USER: daemon
-      MYSQL_PASSWORD: 7359e8xqyQtpyF9s
+      - MYSQL_ROOT_PASSWORD=rootroot
+      - MYSQL_DATABASE=newsfeed
+      - MYSQL_PORT=3307
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"

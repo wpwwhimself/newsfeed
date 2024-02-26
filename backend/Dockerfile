@@ -1,21 +1,12 @@
-FROM php:8.2-apache
-WORKDIR /var/www/html
+FROM bitnami/laravel:10.3.3
 
-RUN apt-get update && \
-    apt-get install -y \
-        libpng-dev \
-        libjpeg-dev \
-        libfreetype6-dev \
-        libzip-dev \
-        zip \
-        unzip \
-        git
+WORKDIR /var/www
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install gd pdo pdo_mysql zip
-
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# cron
+RUN apt update && apt install -y cron
+COPY crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
 
 COPY composer.lock composer.json ./
 
@@ -29,4 +20,7 @@ RUN composer dump-autoload --optimize
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve"]
+COPY ./run.sh /tmp
+ENTRYPOINT [ "/tmp/run.sh" ]
+
+# CMD ["php", "artisan", "serve"]
