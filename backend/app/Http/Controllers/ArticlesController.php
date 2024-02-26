@@ -16,6 +16,8 @@ class ArticlesController extends Controller
 {
     public function list(Request $rq) {
         $articles = Article::orderByDesc("published_at");
+        if ($articles->count() === 0) $this->obtain();
+
         $filters = [];
 
         if ($rq->keyword) {

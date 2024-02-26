@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Http\Controllers\ArticlesController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Http;
