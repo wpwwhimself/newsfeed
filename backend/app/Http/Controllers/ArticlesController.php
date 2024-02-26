@@ -80,6 +80,9 @@ class ArticlesController extends Controller
             "cooking",
             "finance",
             "politics",
+            "music",
+            "sport",
+            "fashion",
         ];
 
         $last_updated = Setting::find("last_data_sync")?->value("value")
